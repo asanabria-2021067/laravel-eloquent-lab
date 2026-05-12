@@ -5,8 +5,7 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -24,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'phone',
+        'role',
         'password',
     ];
 
@@ -50,13 +50,8 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function roles(): BelongsToMany
+    public function appointments(): HasMany
     {
-        return $this->belongsToMany(Role::class)->withPivot(['assigned_at'])->withTimestamps();
-    }
-
-    public function veterinarian(): HasOne
-    {
-        return $this->hasOne(Veterinarian::class);
+        return $this->hasMany(Appointment::class, 'veterinarian_id');
     }
 }
