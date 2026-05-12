@@ -28,4 +28,8 @@ class Service extends Model
         return $this->hasMany(Appointment::class);
     }
 
+    public function invoiceItems(): HasMany
+    {
+        return $this->hasMany(InvoiceItem::class);
+    }
 }
