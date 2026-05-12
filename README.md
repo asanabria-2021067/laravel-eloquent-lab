@@ -158,3 +158,23 @@ Importa siempre los modelos necesarios (`use App\Models\...`) en controladores, 
 3. Crear pruebas (`php artisan test`) para validar seeders y relaciones.
 
 Con este material el laboratorio cumple los lineamientos y queda listo para evaluación o ampliación.
+
+## 14. Ejecución con Docker (opcional)
+Se incluye un `Dockerfile`, `docker-compose.yml` y script de entrada en `docker/entrypoint.sh` para levantar el proyecto con PHP 8.2 CLI y SQLite.
+
+```bash
+# Construir y levantar el contenedor en segundo plano
+docker compose up --build -d
+
+# Instalar dependencias, ejecutar migraciones y seeders dentro del contenedor
+docker compose exec app php artisan migrate
+docker compose exec app php artisan db:seed
+
+# Consultar logs del servidor embebido
+docker compose logs -f app
+
+# Apagar contenedores
+docker compose down
+```
+
+La aplicación queda disponible en `http://localhost:8000`. El volumen montado `.:/var/www/html` permite desarrollar desde el host mientras el contenedor sirve la aplicación. El entrypoint ejecuta `composer install` automáticamente si falta `vendor/` y genera `database/database.sqlite` si no existe.
