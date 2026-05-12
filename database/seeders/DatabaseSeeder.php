@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
                     for ($i = 0; $i < $itemCount; $i++) {
                         $service = $services->random();
                         $quantity = $faker->numberBetween(1, 2);
-                        $unitPrice = $service->price + $faker->randomFloat(2, 0, 40);
+                        $unitPrice = round($service->price + $faker->randomFloat(2, 0, 40), 2);
                         $subtotal = round($quantity * $unitPrice, 2);
 
                         InvoiceItem::factory()->create([
