@@ -19,7 +19,6 @@ class Pet extends Model
         'sex',
         'birth_date',
         'weight_kg',
-        'microchip_code',
     ];
 
     protected $casts = [
