@@ -23,7 +23,7 @@ class ServiceFactory extends Factory
                 'Urgencias 24h',
             ]),
             'description' => $this->faker->sentence(),
-            'base_price' => $this->faker->randomFloat(2, 15, 250),
+            'price' => $this->faker->randomFloat(2, 20, 260),
             'duration_minutes' => $this->faker->numberBetween(15, 120),
             'is_active' => true,
         ];
