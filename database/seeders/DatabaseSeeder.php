@@ -7,11 +7,14 @@ use App\Models\AppointmentNote;
 use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Medication;
 use App\Models\Pet;
+use App\Models\Prescription;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,6 +30,7 @@ class DatabaseSeeder extends Seeder
         $receptionists = User::factory(25)->state(['role' => 'receptionist'])->create();
 
         $services = Service::factory(12)->create();
+        $medications = Medication::factory(60)->create();
 
         $clients = Client::factory(1600)->create();
 
@@ -47,7 +51,7 @@ class DatabaseSeeder extends Seeder
                     'scheduled_at' => $faker->dateTimeBetween('-4 months', '+2 months'),
                 ]);
 
-                $appointments->each(function (Appointment $appointment) use ($faker, $services, $authorIds) {
+                $appointments->each(function (Appointment $appointment) use ($faker, $services, $authorIds, $medications) {
                     $invoice = Invoice::factory()->create([
                         'appointment_id' => $appointment->id,
                         'issued_at' => $appointment->scheduled_at->copy()->subDays($faker->numberBetween(0, 2)),
@@ -78,6 +82,17 @@ class DatabaseSeeder extends Seeder
                     }
 
                     $invoice->update(['total' => round($itemsTotal, 2)]);
+
+                    $prescriptionCount = $faker->numberBetween(0, 2);
+
+                    if ($prescriptionCount > 0) {
+                        Collection::wrap($medications->random($prescriptionCount))->each(function ($medication) use ($appointment) {
+                            Prescription::factory()->create([
+                                'appointment_id' => $appointment->id,
+                                'medication_id' => $medication->id,
+                            ]);
+                        });
+                    }
 
                     if ($faker->boolean(60)) {
                         $noteCount = $faker->numberBetween(1, 2);
