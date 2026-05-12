@@ -25,11 +25,13 @@ class DatabaseSeeder extends Seeder
     {
         $faker = fake();
 
-        $roles = [
-            'admin' => Role::create(['name' => 'admin', 'description' => 'Gestión completa del sistema']),
-            'veterinarian' => Role::create(['name' => 'veterinarian', 'description' => 'Profesional veterinario']),
-            'receptionist' => Role::create(['name' => 'receptionist', 'description' => 'Atención al cliente y agenda']),
-        ];
+        $roles = collect([
+            ['name' => 'admin', 'description' => 'Gestión completa del sistema'],
+            ['name' => 'veterinarian', 'description' => 'Profesional veterinario'],
+            ['name' => 'receptionist', 'description' => 'Atención al cliente y agenda'],
+        ])->mapWithKeys(fn ($data) => [
+            $data['name'] => Role::updateOrCreate(['name' => $data['name']], ['description' => $data['description']]),
+        ]);
 
         $adminUsers = User::factory(5)->create();
         $adminUsers->each(fn (User $user) => $user->roles()->attach($roles['admin']->id));
