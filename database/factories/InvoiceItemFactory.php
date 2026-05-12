@@ -18,7 +18,7 @@ class InvoiceItemFactory extends Factory
             'description' => $this->faker->sentence(3),
             'quantity' => $quantity,
             'unit_price' => $unitPrice,
-            'subtotal' => $quantity * $unitPrice,
+            'subtotal' => round($quantity * $unitPrice, 2),
         ];
     }
 }
