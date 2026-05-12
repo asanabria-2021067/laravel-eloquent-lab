@@ -13,13 +13,13 @@ class Service extends Model
     protected $fillable = [
         'name',
         'description',
-        'base_price',
+        'price',
         'duration_minutes',
         'is_active',
     ];
 
     protected $casts = [
-        'base_price' => 'decimal:2',
+        'price' => 'decimal:2',
         'is_active' => 'boolean',
     ];
 
@@ -28,8 +28,4 @@ class Service extends Model
         return $this->hasMany(Appointment::class);
     }
 
-    public function invoiceItems(): HasMany
-    {
-        return $this->hasMany(InvoiceItem::class);
-    }
 }
