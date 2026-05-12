@@ -51,4 +51,9 @@ class Appointment extends Model
     {
         return $this->hasMany(AppointmentNote::class);
     }
+
+    public function prescriptions(): HasMany
+    {
+        return $this->hasMany(Prescription::class);
+    }
 }
